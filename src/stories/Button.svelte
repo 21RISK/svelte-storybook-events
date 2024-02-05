@@ -26,13 +26,18 @@
 
   const dispatch = createEventDispatcher<{testEvent: string}>();
 
+
+function internalClick() {
+  console.log('lets go')
+  dispatch('testEvent', 'How to display in Actions tab?')
+}
 </script>
 
 <button
   type="button"
   class={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
   {style}
-  on:click={() => dispatch('testEvent', 'How to display in Actions tab?')}
+  on:click={internalClick}
 >
   {label}
 </button>

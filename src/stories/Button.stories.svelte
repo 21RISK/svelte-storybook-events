@@ -1,6 +1,5 @@
 <script context="module">
 	import Button from "./Button.svelte";
-    import { withActions } from '@storybook/addon-actions/decorator';
 
     export const meta = {
         title: 'Buttons',
@@ -11,13 +10,11 @@
             size: 'medium',
             label: 'test-story'
         },
-        parameters: {
-        actions: {
-            handles: ['custom', 'click'],
-        },
-  },
-  decorators: [withActions],
+  
     };
+    function handleClick() {
+        console.log('click called')
+    }
 </script>
 
 <script lang="ts">
@@ -26,6 +23,6 @@
 </script>
 
 <Story name="Primary" let:args>
-    <Button {...args} on:click={args.onClick} />
+    <Button {...args} on:click on:click={handleClick} />
     
 </Story>
