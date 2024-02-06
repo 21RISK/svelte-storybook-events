@@ -1,4 +1,5 @@
-<script context="module">
+<script context="module" lang="ts">
+    import { userEvent, within, waitFor } from '@storybook/testing-library';
 	import Button from "./Button.svelte";
 
     export const meta = {
@@ -8,21 +9,33 @@
         component: Button,
         args: {
             size: 'medium',
-            label: 'test-story'
+            label: 'test-story',
         },
-  
-    };
-    function handleClick() {
-        console.log('click called')
-    }
+        play: async ({ args, canvasElement }) => {
+            const canvas = within(canvasElement);
+            const buttons = canvas.getAllByRole('button');
+            const button = buttons[0];
+            const eventPromise = new Promise((resolve) => {
+                button.addEventListener('testEvent', resolve, { once: true });
+            });
+            await Promise.all([
+                userEvent.click(button),
+                waitFor(() => eventPromise)
+            ])
+            
+            // await waitFor(() => expect(args.on).toHaveBeenCalled());
+        },
+    } satisfies Meta<Button>;;
+
 </script>
 
 <script lang="ts">
     import { Story } from '@storybook/addon-svelte-csf';
+	import type { Meta } from '@storybook/svelte';
 
 </script>
 
 <Story name="Primary" let:args>
-    <Button {...args} on:click on:click={handleClick} />
+    <Button {...args} on:testEvent/>
     
 </Story>
